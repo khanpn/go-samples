@@ -8,11 +8,11 @@ var filename = "deck.json"
 
 func main() {
 	var deck Deck
-	deck = newDeck()
+	// deck = newDeck()
 	// err := deck.saveToFile(filename)
 	
 	deck = readFromFile(filename)
-	// deck.print()
+	deck.shuffle()
 
 	cardsOnHand, remaining := deal(deck, 4)
 	fmt.Println("On hand:")

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"os"
 )
 
@@ -57,4 +58,10 @@ func readFromFile(filename string) Deck {
 	}
 
 	return deck
+}
+
+func (d Deck) shuffle() {
+	rand.Shuffle(len(d.Cards), func(i, j int) {
+		d.Cards[i], d.Cards[j] = d.Cards[j], d.Cards[i]
+	})
 }

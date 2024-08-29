@@ -1,14 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+)
 
 type Deck struct {
-	cards []string
+	Cards []string `json:"cards"`
 }
 
 func (d Deck) print() {
-	for i, card := range d.cards {
-		fmt.Println(i, card)
+	for i, card := range d.Cards {
+		fmt.Println(i + 1, card)
 	}
 }
 
@@ -19,7 +23,7 @@ func newDeck() Deck {
 
 	for _, suit := range cardSuits {
 		for _, value := range cardValues {
-			d.cards = append(d.cards, value + " of " + suit)
+			d.Cards = append(d.Cards, value + " of " + suit)
 		}
 	}
 
@@ -27,6 +31,30 @@ func newDeck() Deck {
 }
 
 func deal(d Deck, handSize int) ([]string, []string) {
-	return d.cards[:handSize], d.cards[handSize:]
+	return d.Cards[:handSize], d.Cards[handSize:]
 }
 
+func (d Deck) toByteSlices() []byte {
+	bytes, _ := json.Marshal(d);
+	return bytes
+}
+
+func (d Deck) saveToFile(filename string) error {
+	return os.WriteFile(filename, d.toByteSlices(), os.ModePerm)
+}
+
+func readFromFile(filename string) Deck {
+	var deck Deck
+	bytes, err := os.ReadFile(filename)
+	
+	if (err == nil) {
+		err = json.Unmarshal(bytes, &deck)
+	}
+	
+	if (err != nil) {
+		fmt.Println("Error: ", err)
+		os.Exit(1)
+	}
+
+	return deck
+}

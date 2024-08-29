@@ -1,12 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
+
+var filename = "deck.json"
 
 func main() {
-	deck := newDeck()
-	cards, remaining := deal(deck, 4)
+	var deck Deck
+	deck = newDeck()
+	// err := deck.saveToFile(filename)
+	
+	deck = readFromFile(filename)
+	// deck.print()
+
+	cardsOnHand, remaining := deal(deck, 4)
 	fmt.Println("On hand:")
-	printCards(cards)
+	printCards(cardsOnHand)
 	fmt.Println("Remaining:")
 	printCards(remaining)
 }
